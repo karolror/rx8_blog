@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect, request
-from flaskblog import app, db , bcrypt, mail
+from flaskblog import app, db, bcrypt, mail
 from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, EmailForm
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
@@ -8,6 +8,7 @@ import secrets
 import os
 from PIL import Image
 
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -15,9 +16,11 @@ def home():
 	posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=4)
 	return render_template('home.html', title='Home', posts=posts)
 
+
 @app.route("/about")
 def about():
 	return render_template("about.html", title='About')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -33,6 +36,7 @@ def register():
 		return redirect(url_for('login'))
 	return render_template("register.html", title='Register', form=form)
 
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 	if current_user.is_authenticated:
@@ -47,6 +51,7 @@ def login():
 		else:
 			flash('Login unsuccessful. Please try again.', 'danger')
 	return render_template("login.html", title='Login', form=form)
+
 
 @app.route("/logout")
 def logout():
@@ -71,7 +76,7 @@ def save_picture(form_picture):
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-	form= UpdateAccountForm()
+	form = UpdateAccountForm()
 	if form.validate_on_submit():
 		if form.picture.data:
 			picture_file = save_picture(form.picture.data)
@@ -86,6 +91,7 @@ def account():
 		form.email.data = current_user.email
 	image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 	return render_template("account.html", title='Account', image_file=image_file, form=form)
+
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
@@ -105,6 +111,7 @@ def post(post_id):
 	post = Post.query.get_or_404(post_id)
 	return render_template('post.html', title=post.title, post=post)
 
+
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 def update_post(post_id):
 	post = Post.query.get_or_404(post_id)
@@ -122,6 +129,7 @@ def update_post(post_id):
 		form.content.data = post.content
 	return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
 
+
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 def delete_post(post_id):
 	post = Post.query.get_or_404(post_id)
@@ -132,16 +140,18 @@ def delete_post(post_id):
 	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('home'))
 
+
 @app.route("/contact", methods=['GET', 'POST'])
 def contact():
 	form = EmailForm()
 	if form.validate_on_submit():
-		msg = Message(form.title.data, sender=form.email.data, recipients = ['rx8swapblog@gmail.com'])
-		msg.body = 'From: ' + form.name.data + ' Email: '+ form.email.data + ' Content: ' + form.content.data 
+		msg = Message(form.title.data, sender=form.email.data, recipients=['rx8swapblog@gmail.com'])
+		msg.body = 'From: ' + form.name.data + ' Email: ' + form.email.data + ' Content: ' + form.content.data
 		mail.send(msg)
 		flash('Your message has been sent!', 'success')
 		return redirect(url_for('home'))
 	return render_template('contact.html', title='Contact', form=form)
+
 
 @app.route("/user/<string:username>")
 def user_posts(username):
