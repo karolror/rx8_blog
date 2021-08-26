@@ -14,84 +14,86 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-dark navbar-expand-md justify-content-center fixed-top">
-		    <a href="/" class="navbar-brand d-flex w-50 mr-auto mb-0 h1"><i class="fa fa-car" style="font-size:30px; margin-right: 5px;"></i>&nbsp;RX8 Swap Blog</a>
-		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
-		        <span class="navbar-toggler-icon"></span>
-		    </button>
-		    <div class="navbar-collapse collapse w-100" id="collapsingNavbar3">
-		        <ul class="navbar-nav w-100 justify-content-center">
-		            <li class="nav-item">
-		                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-		            </li>
-		            <li class="nav-item">
-		                <a class="nav-link" href="{{ url_for('about') }}">About</a>
-		            </li>
-		            <li class="nav-item">
-		                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
-		            </li>
-		        </ul>
-		        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
-		        	{% if current_user.is_authenticated %}
-		        		<li class="nav-item">
-			                <a class="nav-link" href="{{ url_for('new_post') }}">New Post</a>
-			            </li>
-		        		<li class="nav-item">
-			                <a class="nav-link" href="{{ url_for('account') }}">Account</a>
-			            </li>
-		        		<li class="nav-item">
-			                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-			            </li>
-		        	{% else %}
+	<div class="container-fluid">
+		<header>
+			<nav class="navbar navbar-dark navbar-expand-md justify-content-center fixed-top">
+			    <a href="/" class="navbar-brand d-flex w-50 mr-auto mb-0 h1"><i class="fa fa-car" style="font-size:30px; margin-right: 5px;"></i>&nbsp;RX8 Swap Blog</a>
+			    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
+			        <span class="navbar-toggler-icon"></span>
+			    </button>
+			    <div class="navbar-collapse collapse w-100" id="collapsingNavbar3">
+			        <ul class="navbar-nav w-100 justify-content-center">
 			            <li class="nav-item">
-			                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+			                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
 			            </li>
 			            <li class="nav-item">
-			                <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-		            	</li>
-		            {% endif %}
-		        </ul>
-		    </div>
-		</nav>
-	</header>
-	<main role="main" class="container">
-		<div class="row">
-			<div class="col-md-8">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-						{% for category, message in messages %}
-							<div class="alert alert-{{ category }}">
-								{{ message }}
+			                <a class="nav-link" href="{{ url_for('about') }}">About</a>
+			            </li>
+			            <li class="nav-item">
+			                <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+			            </li>
+			        </ul>
+			        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+			        	{% if current_user.is_authenticated %}
+			        		<li class="nav-item">
+				                <a class="nav-link" href="{{ url_for('new_post') }}">New Post</a>
+				            </li>
+			        		<li class="nav-item">
+				                <a class="nav-link" href="{{ url_for('account') }}">Account</a>
+				            </li>
+			        		<li class="nav-item">
+				                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+				            </li>
+			        	{% else %}
+				            <li class="nav-item">
+				                <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+				            </li>
+				            <li class="nav-item">
+				                <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+			            	</li>
+			            {% endif %}
+			        </ul>
+			    </div>
+			</nav>
+		</header>
+		<main role="main" class="container">
+			<div class="row">
+				<div class="col-md-8">
+					{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+							{% for category, message in messages %}
+								<div class="alert alert-{{ category }}">
+									{{ message }}
+								</div>
+							{% endfor %}
+						{% endif %}
+					{% endwith %}
+					{% block content %}{% endblock%}
+				</div>
+				<div class="col-md-4">
+					<section class="sidebar">
+						<div class="card">
+							<div class="card-body">
+								<h3 class="card-title">Whats new?</h3>
+								<p class="card-text">
+									<ul>
+										<li>Latest Posts</li>
+										<li>Announcements</li>
+									</ul>
+								</p>
 							</div>
-						{% endfor %}
-					{% endif %}
-				{% endwith %}
-				{% block content %}{% endblock%}
-			</div>
-			<div class="col-md-4">
-				<section class="sidebar">
-					<div class="card">
-						<div class="card-body">
-							<h3 class="card-title">Whats new?</h3>
-							<p class="card-text">
-								<ul>
-									<li>Latest Posts</li>
-									<li>Announcements</li>
-								</ul>
-							</p>
 						</div>
-					</div>
-				</section>
+					</section>
+				</div>
 			</div>
-		</div>
-	</main>
-	<!-- Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-	</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
+		</main>
+		<!-- Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+		</script>
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+	    </script>
+	    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+	    </script>
+	</div>
 </body>
 </html>

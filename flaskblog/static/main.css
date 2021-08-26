@@ -1,14 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap');
-body {
- background-image: url("tlo.jpg") !important;
- background-position: center;
- background-repeat: no-repeat;
- background-position: fixed;
- background-attachment: fixed;
- background-size: cover;
-}
+
 * {
 	font-family: 'Red Hat Display', sans-serif;
+}
+.container-fluid {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-image:linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(tlo.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    min-height:100vh;
 }
 .container {
 	margin-top: 80px;
