@@ -1,8 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request
-from flaskblog import app, db , bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from flaskblog import app, db , bcrypt, mail
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, EmailForm
 from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 import secrets
 import os
 from PIL import Image
@@ -130,3 +131,14 @@ def delete_post(post_id):
 	db.session.commit()
 	flash('Your post has been deleted!', 'success')
 	return redirect(url_for('home'))
+
+@app.route("/contact", methods=['GET', 'POST'])
+def contact():
+	form = EmailForm()
+	if form.validate_on_submit():
+		msg = Message(form.title.data, sender=form.email.data, recipients = ['rx8swapblog@gmail.com'])
+		msg.body = 'From: ' + form.name.data + ' Email: '+ form.email.data + ' Content: ' + form.content.data 
+		mail.send(msg)
+		flash('Your message has been sent!', 'success')
+		return redirect(url_for('home'))
+	return render_template('contact.html', title='Contact', form=form)
